@@ -1,0 +1,10 @@
+
+function isUserSchema() {
+  return data().size() == 2
+    && 'uid' in data() && data().uid is string
+    && 'name' in data() && data().name is string;
+}
+
+function isValidUser() {
+  return 2 <= data().name.size() && data().name.size() <= 30;
+}

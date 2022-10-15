@@ -1,0 +1,32 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+    match /users/{user_id} {
+      allow read: if hasUid();
+      allow write: if isUidEqual(data().uid) && isUserSchema() && isValidUser();
+    }
+  }
+}
+
+function hasUid() {
+  return request.auth.uid != null;
+}
+
+function isUidEqual(uid) {
+  return request.auth.uid == uid;
+}
+
+function data() {
+  return request.resource.data;
+}
+
+function isUserSchema() {
+  return data().size() == 2
+    && 'uid' in data() && data().uid is string
+    && 'name' in data() && data().name is string;
+}
+
+function isValidUser() {
+  return 2 <= data().name.size() && data().name.size() <= 30;
+}
