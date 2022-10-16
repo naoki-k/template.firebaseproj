@@ -1,0 +1,53 @@
+rules_version = '2';
+
+service firebase.storage {
+  match /b/{bucket}/o {
+    match /users/{uid}/profile/{filename} {
+      allow write: if isUidEqual(uid) && isPNG() && lessThan(1.5);
+      allow read: if hasUid();
+    }
+
+    match /groups/{tag}/settings/{filename} {
+      allow write: if isOwner(tag) && isPNG() && lessThan(1.5);
+      allow read: if hasUid();
+    }
+
+    match /groups/{tag}/activity/{filename} {
+      allow write: if isMember(tag) && isPNG() && lessThan(1.5);
+      allow read: if hasUid();
+    }
+
+    match /groups/{tag}/private/{filename} {
+      allow write: if isMember(tag) && isPNG() && lessThan(1.5);
+      allow read: if isMember(tag);
+    }
+  }
+}
+
+function hasUid() {
+  return request.auth.uid != null;
+}
+
+function isUidEqual(uid) {
+  return request.auth.uid == uid;
+}
+
+function isPNG() {
+  return request.resource.contentType == 'image/png';
+}
+
+function lessThan(mb) {
+  return request.resource.size < mb * 1024 * 1024;
+}
+
+function isAdmin() {
+  return request.auth.token.admin == true;
+}
+
+function isMember(tag) {
+  return request.auth.token.member == tag;
+}
+
+function isOwner(tag) {
+  return request.auth.token.owner == tag;
+}

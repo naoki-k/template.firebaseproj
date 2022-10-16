@@ -1,0 +1,16 @@
+
+function hasUid() {
+  return request.auth.uid != null;
+}
+
+function isUidEqual(uid) {
+  return request.auth.uid == uid;
+}
+
+function isPNG() {
+  return request.resource.contentType == 'image/png';
+}
+
+function lessThan(mb) {
+  return request.resource.size < mb * 1024 * 1024;
+}

@@ -1,0 +1,12 @@
+
+function hasUid() {
+  return request.auth.uid != null;
+}
+
+function isUidEqual(uid) {
+  return request.auth.uid == uid;
+}
+
+function data() {
+  return request.resource.data;
+}

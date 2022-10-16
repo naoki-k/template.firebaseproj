@@ -1,0 +1,4 @@
+
+function isOwner(tag) {
+  return request.auth.token.owner == tag;
+}

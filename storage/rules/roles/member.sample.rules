@@ -1,0 +1,4 @@
+
+function isMember(tag) {
+  return request.auth.token.member == tag;
+}

@@ -1,0 +1,25 @@
+rules_version = '2';
+
+service firebase.storage {
+  match /b/{bucket}/o {
+    match /users/{uid}/profile/{filename} {
+      allow write: if isUidEqual(uid) && isPNG() && lessThan(1.5);
+      allow read: if hasUid();
+    }
+
+    match /groups/{tag}/settings/{filename} {
+      allow write: if isOwner(tag) && isPNG() && lessThan(1.5);
+      allow read: if hasUid();
+    }
+
+    match /groups/{tag}/activity/{filename} {
+      allow write: if isMember(tag) && isPNG() && lessThan(1.5);
+      allow read: if hasUid();
+    }
+
+    match /groups/{tag}/private/{filename} {
+      allow write: if isMember(tag) && isPNG() && lessThan(1.5);
+      allow read: if isMember(tag);
+    }
+  }
+}

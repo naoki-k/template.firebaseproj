@@ -34,7 +34,7 @@
     ]
   },
   "storage": {
-    "rules": "storage.rules"
+    "rules": "storage/storage.generate.rules"
   },
   "emulators": {
     "auth": {

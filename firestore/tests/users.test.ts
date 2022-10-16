@@ -1,13 +1,11 @@
 import { readFileSync } from 'fs'
-import * as firestore from '@firebase/rules-unit-testing'
+import * as test from '@firebase/rules-unit-testing'
 import { v4 } from 'uuid'
-import firebase from 'firebase/compat/app'
 
-const serverTimestamp = () => firebase.firestore.Timestamp.now()
-let env: firestore.RulesTestEnvironment
+let env: test.RulesTestEnvironment
 
 beforeAll(async () => {
-  env = await firestore.initializeTestEnvironment({
+  env = await test.initializeTestEnvironment({
     projectId: v4(),
     firestore: {
       rules: readFileSync('./firestore.generate.rules', 'utf-8')
@@ -23,13 +21,13 @@ afterAll(async () => {
   await env.cleanup()
 })
 
-describe('', () => {
+describe('users', () => {
   describe('write', () => {
     it('success', async () => {
       const id = v4()
       const context = env.authenticatedContext(id)
       const db = context.firestore()
-      await firestore.assertSucceeds(
+      await test.assertSucceeds(
         db.collection('users').doc(id).set({
           uid: id,
           name: 'test',
@@ -37,12 +35,26 @@ describe('', () => {
       )
     })
 
-    it('invalid: extra params', async () => {
+    it('fails: extra params', async () => {
       const id = v4()
       const context = env.authenticatedContext(id)
       const db = context.firestore()
-      await firestore.assertFails(
+      await test.assertFails(
         db.collection('users').doc(id).set({
+          uid: id,
+          name: 'test',
+          nickname: 'tester',
+        })
+      )
+    })
+
+    it('fails: not matches request uid', async () => {
+      const id = v4()
+      const anotherId = v4()
+      const context = env.authenticatedContext(id)
+      const db = context.firestore()
+      await test.assertFails(
+        db.collection('users').doc(anotherId).set({
           uid: id,
           name: 'test',
           nickname: 'tester',
