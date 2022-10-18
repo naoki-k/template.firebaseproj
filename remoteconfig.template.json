@@ -1,1 +1,10 @@
-{}
+{
+  "parameters": {
+    "minimum_support_build": {
+      "defaultValue": {
+        "value": "1"
+      },
+      "valueType": "NUMBER"
+    }
+  }
+}
