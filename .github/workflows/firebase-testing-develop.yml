@@ -24,15 +24,21 @@ jobs:
           npm install --save-dev firebase-tools
 
       - name: testing functions
-        run: npm run test
+        run: |
+          npm ci
+          npm run test
         working-directory: ./functions
 
       - name: testing firestore
-        run: npm run test
+        run: |
+          npm ci
+          npm run test
         working-directory: ./firestore
 
       - name: testing storage
-        run: npm run test
+        run: |
+          npm ci
+          npm run test
         working-directory: ./storage
 
       - name: delete credentials
