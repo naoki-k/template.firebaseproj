@@ -7,7 +7,7 @@ name: develop deploy to firebase
 jobs:
   deploy-develop:
     env:
-      GOOGLE_APPLICATION_CREDENTIALS: ${{ secrets.GOOGLE_APPLICATION_CREDENTIALS }}
+      GOOGLE_APPLICATION_CREDENTIALS: ./service-account.json
       GCLOUD_SERVICE_KEY: ${{ secrets.GCLOUD_SERVICE_KEY_DEV }}
     runs-on: ubuntu-latest
     strategy:
