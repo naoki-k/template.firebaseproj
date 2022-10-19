@@ -26,9 +26,6 @@ jobs:
             ${{secrets.FIREBASE_AUTH_JSON_DEVELOP}}
           EOS
           export GOOGLE_APPLICATION_CREDENTIALS="./service-account-file.json"
-
-      - name: testing functions
-        run: |
           firebase use develop
           firebase run test
         working-directory: ./functions
