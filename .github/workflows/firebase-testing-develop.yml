@@ -19,20 +19,26 @@ jobs:
       - name: install firebase cli
         run: npm install -g firebase-tools
 
+      - name: set auth
+        run: |
+          touch service-account-file.json
+          ${{secrets.FIREBASE_AUTH_JSON_DEVELOP}} > service-account-file.json
+          export GOOGLE_APPLICATION_CREDENTIALS="service-account-file.json"
+
       - name: testing functions
         run: |
-          firebase use develop --token ${{secrets.FIREBASE_TOKEN}}
+          firebase use develop
           firebase run test
         working-directory: ./functions
 
       - name: testing firestore
         run: |
-          firebase use develop --token ${{secrets.FIREBASE_TOKEN}}
+          firebase use develop
           firebase run test
         working-directory: ./firestore
 
       - name: testing storage
         run: |
-          firebase use develop --token ${{secrets.FIREBASE_TOKEN}}
+          firebase use develop
           firebase run test
         working-directory: ./storage
