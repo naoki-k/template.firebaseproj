@@ -26,6 +26,7 @@ jobs:
       - name: testing functions
         run: |
           npm ci
+          firebase use develop
           npm run test
         working-directory: ./functions
 
