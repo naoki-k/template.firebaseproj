@@ -4,17 +4,28 @@ name: develop deploy to firebase
     branches:
       - develop
 
-job:
-  build_and_deploy_test:
+jobs:
+  deploy-develop:
+    env:
+      GOOGLE_APPLICATION_CREDENTIALS: ./service-account.json
+      GCLOUD_SERVICE_KEY: ${{ secrets.GCLOUD_SERVICE_KEY_DEV }}
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        node-version: [ 16.x ]
+        node-version: [16.x]
     steps:
       - uses: actions/checkout@v2
       - uses: actions/setup-node@v1
         with:
           node-version: ${{ matrix.node-version }}
+
+      - name: setup
+        run: |
+          echo $GCLOUD_SERVICE_KEY | base64 -d > $GOOGLE_APPLICATION_CREDENTIALS
+          npm install -g firebase-tools
+          firebase use develop
+        env:
+          GOOGLE_APPLICATION_CREDENTIALS: ./service-account.json
 
       - name: check functions changes
         id: diff_functions
@@ -51,29 +62,22 @@ job:
 
       - name: deploy functions
         run: |
-          firebase use develop --token ${{secrets.FIREBASE_TOKEN}}
           npm ci
-          firebase deploy --only functions --token ${{secrets.FIREBASE_TOKEN}}
+          firebase deploy --only functions
         working-directory: ./functions
         if: steps.diff_functions.outputs.diff
 
       - name: deploy firestore
-        run: |
-          firebase use develop --token ${{secrets.FIREBASE_TOKEN}}
-          firebase deploy --only firestore --token ${{secrets.FIREBASE_TOKEN}}
+        run: firebase deploy --only firestore
         working-directory: ./firestore
         if: steps.diff_firestore.outputs.diff
 
       - name: deploy storage
-        run: |
-          firebase use develop --token ${{secrets.FIREBASE_TOKEN}}
-          firebase deploy --only storage --token ${{secrets.FIREBASE_TOKEN}}
+        run: firebase deploy --only storage
         working-directory: ./storage
         if: steps.diff_storage.outputs.diff
 
       - name: deploy hosting
-        run: |
-          firebase use develop --token ${{secrets.FIREBASE_TOKEN}}
-          firebase deploy --only hosting --token ${{secrets.FIREBASE_TOKEN}}
+        run: firebase deploy --only hosting
         working-directory: ./hosting
         if: steps.diff_hosting.outputs.diff
