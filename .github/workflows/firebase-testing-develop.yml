@@ -22,7 +22,9 @@ jobs:
       - name: set auth
         run: |
           touch service-account-file.json
-          echo ${{secrets.FIREBASE_AUTH_JSON_DEVELOP}} > service-account-file.json
+          cat <<EOS > service-account-file.json
+            ${{secrets.FIREBASE_AUTH_JSON_DEVELOP}}
+          EOS
           export GOOGLE_APPLICATION_CREDENTIALS="service-account-file.json"
 
       - name: testing functions
