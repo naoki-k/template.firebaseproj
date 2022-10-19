@@ -26,6 +26,8 @@ jobs:
 
       - name: testing functions
         run: |
+          echo $GCLOUD_SERVICE_KEY | base64 -d > $GOOGLE_APPLICATION_CREDENTIALS
+          firebase use template-dev-a84f2
           npm ci
           npm run test
         working-directory: ./functions
