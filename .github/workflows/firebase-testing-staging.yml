@@ -2,7 +2,7 @@ name: develop testing to firebase on emulator
 'on':
   push:
     branches:
-      - 'future/**'
+      - 'develop/**'
 
 steps:
   - uses: actions/checkout@v2
