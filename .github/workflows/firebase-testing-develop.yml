@@ -15,30 +15,24 @@ jobs:
       - uses: actions/setup-node@v1
         with:
           node-version: ${{ matrix.node-version }}
-
-      - name: set auth
-        id: 'auth'
-        uses: 'google-github-actions/auth@v0'
-        with:
-          credentials_json: '${{secrets.FIREBASE_AUTH_JSON_DEVELOP}}'
-
-      - name: setup cli
-        uses: 'google-github-actions/setup-gcloud@v0'
+      - name: setup
+        run: |
+          npm install -g firebase-tools
+          touch service-account-file.json
+          cat <<EOS > service-account-file.json
+            ${{secrets.FIREBASE_AUTH_JSON_DEVELOP}}
+          EOS
+          export GOOGLE_APPLICATION_CREDENTIALS="service-account-file.json"
+          firebase use develop
 
       - name: testing functions
-        run: |
-          firebase use develop
-          firebase run test
+        run: npm run test
         working-directory: ./functions
 
       - name: testing firestore
-        run: |
-          firebase use develop
-          firebase run test
+        run: npm run test
         working-directory: ./firestore
 
       - name: testing storage
-        run: |
-          firebase use develop
-          firebase run test
+        run: npm run test
         working-directory: ./storage

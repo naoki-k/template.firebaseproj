@@ -22,17 +22,17 @@ jobs:
       - name: testing functions
         run: |
           firebase use staging --token ${{secrets.FIREBASE_TOKEN}}
-          firebase run test
+          npm run test
         working-directory: ./functions
 
       - name: testing firestore
         run: |
           firebase use staging --token ${{secrets.FIREBASE_TOKEN}}
-          firebase run test
+          npm run test
         working-directory: ./firestore
 
       - name: testing storage
         run: |
           firebase use staging --token ${{secrets.FIREBASE_TOKEN}}
-          firebase run test
+          npm run test
         working-directory: ./storage
