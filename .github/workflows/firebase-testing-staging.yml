@@ -20,19 +20,19 @@ jobs:
         run: npm install -g firebase-tools
 
       - name: testing functions
-      - run: |
+        run: |
           firebase use staging --token ${{secrets.FIREBASE_TOKEN}}
           firebase run test
         working-directory: ./functions
 
       - name: testing firestore
-      - run: |
+        run: |
           firebase use staging --token ${{secrets.FIREBASE_TOKEN}}
           firebase run test
         working-directory: ./firestore
 
       - name: testing storage
-      - run: |
+        run: |
           firebase use staging --token ${{secrets.FIREBASE_TOKEN}}
           firebase run test
         working-directory: ./storage
