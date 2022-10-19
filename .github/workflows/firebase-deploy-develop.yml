@@ -4,12 +4,12 @@ name: develop deploy to firebase
     branches:
       - develop
 
-job:
-  build_and_deploy_test:
+jobs:
+  deploy-develop:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        node-version: [ 16.x ]
+        node-version: [16.x]
     steps:
       - uses: actions/checkout@v2
       - uses: actions/setup-node@v1
