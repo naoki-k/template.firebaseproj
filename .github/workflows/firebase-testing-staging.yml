@@ -16,23 +16,20 @@ jobs:
         with:
           node-version: ${{ matrix.node-version }}
 
-      - name: install firebase cli
-        run: npm install -g firebase-tools
+      - name: setup
+        run: |
+          echo $GCLOUD_SERVICE_KEY | base64 -d > $GOOGLE_APPLICATION_CREDENTIALS
+          npm install -g firebase-tools
+          firebase use develop
 
       - name: testing functions
-        run: |
-          firebase use staging --token ${{secrets.FIREBASE_TOKEN}}
-          npm run test
+        run: npm run test
         working-directory: ./functions
 
       - name: testing firestore
-        run: |
-          firebase use staging --token ${{secrets.FIREBASE_TOKEN}}
-          npm run test
+        run: npm run test
         working-directory: ./firestore
 
       - name: testing storage
-        run: |
-          firebase use staging --token ${{secrets.FIREBASE_TOKEN}}
-          npm run test
+        run: npm run test
         working-directory: ./storage
