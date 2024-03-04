@@ -2,5 +2,7 @@
   "name": "buzma.firebaseproj",
   "version": "1.0.0",
   "dependencies": {
+    "firebase": "^9.23.0",
+    "firebase-admin": "^12.0.0"
   }
 }
